@@ -10,20 +10,23 @@ FROM ubuntu:22.04
 # Install the above tools, unpack and make it available in the PATH executable
 ###
 LABEL end="dev"
-LABEL maintainer="email@outlook.com"
+LABEL maintainer="ssonaikar@gmail.com"
 
-RUN apt-get update && apt-get install -y \
-    curl iproute2 sshfs unzip less groff
-
+# install required applications
+RUN apt-get update
+RUN apt install -y curl iproute2 sshfs unzip less groff
 RUN apt-get clean
 
+# install kubectl
 RUN curl -LO "https://dl.k8s.io/release/v1.23.6/bin/linux/amd64/kubectl" \
     && chmod +x ./kubectl \
     && mv ./kubectl /usr/local/bin/kubectl && kubectl version --client
 
+# install aws-cli
 RUN curl https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip -o /tmp/awscli-linux.zip \
     && cd /tmp && unzip awscli-linux.zip && ./aws/install && rm -rf ./aws
 
+# create custom user builder
 RUN useradd -ms /bin/bash builder
 USER builder
 
