@@ -1,15 +1,21 @@
 locals {
-  #add Locals here
+  #loclal vars here
   local-tag = {
     cot-tag = "1.0"
   }
+  org-name  = "my-org"
+  dept-name = "my-dept"
+  common-tags = {
+    prefix = "${local.org-name}-${local.dept-name}"
+  }
 }
-resource "azurerm_storage_account" "storage-account" {
-  name                     = var.sa-name
-  resource_group_name      = var.resource_group_name
-  location                 = var.location
-  account_tier             = var.account_tier
-  account_replication_type = var.account_replication_type
 
-  tags = merge(local.local-tag, var.common-tags)
+resource "aws_ebs_volume" "intuitive_ebs_volumes" {
+  count = var.ebs_volumes
+
+  availability_zone = var.availability_zone
+  size              = var.size
+  type              = var.type
+
+  tags = merge(local.local-tag, local.common-tags)
 }

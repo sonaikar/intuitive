@@ -1,41 +1,34 @@
-# Custom Data 
 locals {
-    vm_custom_data = <<CUSTOM_DATA
-    #!/bin/sh
-    #sudo yum update -y
-    sudo yum install -y httpd
-    sudo systemctl enable httpd
-    sudo systemctl start httpd
-    CUSTOM_DATA  
+  #loclal vars here
+  local-tag = {
+    cot-tag = "1.0"
+  }
+  org-name  = "my-org"
+  dept-name = "my-dept"
+  common-tags = {
+    prefix = "${local.org-name}-${local.dept-name}"
+  }
 }
 
-resource "azurerm_linux_virtual_machine" "web_linuxvm" {
+
+resource "aws_instance" "intuitive_instance" {
   count = var.vm-count
 
-  name = "linuxvm-${count.index}"
-  resource_group_name = var.location
-  location = var.resource_group_name
-  size = "Standard_DS1_v2"
-  admin_username = "azureuser"
-  network_interface_ids = [ element(var.nics, count.index) ]
-  admin_ssh_key {
-    username = "azureuser"
-    public_key = file("${path.module}/ssh-keys/vm-ssh.pub")
-  }
-  os_disk {
-    caching = "ReadWrite"
-    storage_account_type = "Standard_LRS"
-  }
-  source_image_reference {
-    publisher = "RedHat"
-    offer = "RHEL"
-    sku = "83-gen2"
-    version = "latest"
-  }
-    
-  custom_data = base64encode(local.vm_custom_data)  
-  /*
-  can do custom_data = filebase64("${path.module}/from-script.sh")
-  would be better 
-  */
+  ami             = "ami-08133f9f7ea98ef23" #jammy jellyfish Ubuntu 22.04
+  key_name        = var.ssh_key_name
+  security_groups = [var.security_group_id]
+  subnet_id       = var.subnet_id
+  instance_type   = var.instance_type
+
+  associate_public_ip_address = true
+
+  tags = merge(local.local-tag, local.common-tags)
+}
+
+resource "aws_volume_attachment" "ebs" {
+  count = var.vm-count
+
+  device_name = "/dev/sdh"
+  volume_id   = var.ebs_volume_id[count.index]
+  instance_id = aws_instance.intuitive_instance[count.index].id
 }

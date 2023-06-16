@@ -1,34 +1,59 @@
 variable "region" {
-    type = string
-}
-variable "rg-name" {
-    type = string
-}
-
-#Storage Account vars
-variable "sa-name" {
-    type = string
-}
-variable "account_tier" {
-    type = string
-}
-variable "account_replication_type" {
-    type = string
-}
-
-#Vairtual Nework vars
-variable "vnet-name" {
-    type = string
-}
-variable "address_space"  {
-    type = list(string)
-}
-
-variable "address_prefixes" {
-  type = list
+  type    = string
+  default = "us-west-2"
 }
 
 variable "vm-count" {
-  type = number
+  type    = number
   default = 2
+}
+
+variable "public_subnets" {
+  description = "A list of public subnets inside the VPC"
+  type        = list(string)
+  default     = ["10.0.1.0/24"]
+}
+
+variable "cidr" {
+  type    = string
+  default = "10.0.0.0/16"
+}
+
+variable "ebs_size" {
+  type    = number
+  default = 10
+}
+
+variable "ebs_volumes" {
+  type    = number
+  default = 2
+}
+
+variable "availability_zone" {
+  type    = string
+  default = "us-west-2a"
+}
+
+variable "type" {
+  description = "The type of EBS volume"
+  type        = string
+  default     = "standard"
+}
+
+variable "create_vpc" {
+  default = true
+}
+
+variable "bucket_name" {
+  default = "intuitive_s3"
+}
+
+variable "ssh_key_name" {
+  type    = string
+  default = "vm-ssh.pub"
+}
+
+variable "instance_type" {
+  type    = string
+  default = "t2.micro"
 }

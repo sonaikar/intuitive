@@ -1,7 +1,11 @@
-output "vnet-name" {
-  value = azurerm_virtual_network.vnet.name
+output "subnet_id" {
+  value = aws_subnet.intuitive-subnet.id
 }
 
-output "nics" {
-  value = toset(values(azurerm_network_interface.netowrk-interface)[*].id)
+output "ssh_security_group_id" {
+  value = aws_security_group.ssh-security-group.id
+}
+
+output "vpc_id" {
+  value = aws_vpc.intuitive-vpc.id
 }

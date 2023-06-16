@@ -1,5 +1,6 @@
-#variable "name" {}
 variable "vm-count" {}
-variable "resource_group_name" {}
-variable "location" {}
-variable "nics" {}
+variable "security_group_id" {}
+variable "subnet_id" {}
+variable "ebs_volume_id" {}
+variable "ssh_key_name" {}
+variable "instance_type" {}
