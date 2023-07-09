@@ -19,6 +19,11 @@ variable "cidr" {
   default = "10.0.0.0/16"
 }
 
+variable "route_cidr" {
+  type = string
+  default = "10.0.1.0/24"
+}
+
 variable "ebs_size" {
   type    = number
   default = 10
@@ -45,7 +50,7 @@ variable "create_vpc" {
 }
 
 variable "bucket_name" {
-  default = "intuitive_s3"
+  default = "intuitive-s3"
 }
 
 variable "ssh_key_name" {

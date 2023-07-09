@@ -14,7 +14,7 @@ resource "random_string" "stg-random" {
 
 
 module "storage" {
-  source = "./module/storage"
+  source = "git@github.com:sonaikar/modules.git//storage?ref=v1.0.18"
 
   size              = var.ebs_size
   ebs_volumes       = var.ebs_volumes
@@ -23,17 +23,19 @@ module "storage" {
 }
 
 module "network" {
-  source = "./module/network"
+  source = "git@github.com:sonaikar/modules.git//network?ref=v1.0.18"
 
-  vm-count       = var.vm-count
-  cidr           = var.cidr
-  public_subnets = [var.public_subnets]
-  create_vpc     = var.create_vpc
-  region         = var.region
+  vm-count          = var.vm-count
+  cidr              = var.cidr
+  public_subnets    = [var.public_subnets]
+  create_vpc        = var.create_vpc
+  region            = var.region
+  availability_zone = var.availability_zone
+ route_cidr = var.route_cidr
 }
 
 module "compute" {
-  source = "./module/compute"
+  source = "git@github.com:sonaikar/modules.git//compute?ref=v1.0.18"
 
   vm-count          = var.vm-count
   security_group_id = module.network.ssh_security_group_id
@@ -44,7 +46,7 @@ module "compute" {
 }
 
 module "s3" {
-  source = "./module/s3"
+  source = "git@github.com:sonaikar/modules.git//s3?ref=v1.0.18"
 
   bucket_name = var.bucket_name
 }
